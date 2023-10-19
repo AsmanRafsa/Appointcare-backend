@@ -1,19 +1,19 @@
 from rest_framework import serializers
-from .models import Hospital,NewHospital
+from ..models import Hospital
 
-
-class HospitalSerializer(serializers.ModelSerializer):
+class HospitalRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
-        Model=Hospital
-        fields=("id","hospital_Image","hospital_Location","hospital_Slogan","hospital_Detail",)
+        model = Hospital
+        fields = ('email', 'phone_number', 'name', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        hospital = Hospital(**validated_data)
+        hospital.set_password(password)
+        hospital.save()
+        return hospital
 
-
-class NewHospitalSerializer(serializers.ModelSerializer):
-     class Meta:
-         Model=NewHospital 
-         fields=('id','email','hospitalName','phonenumber','password') 
-    
-class UserAuthenticationSerializer(serializers.ModelSerializer):
+class HospitalLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField(max_length=15)
+    password = serializers.CharField(write_only=True)
