@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from .model import Hospital
+from .models import Hospital
+from .serializers import HospitalSerializer
 from rest_framework import status
 from rest_framework.views import APIView 
 from django.http import Http404
 from rest_framework.response import Response
-from .serializers import HospitalSerializer
-
 # Create your views here.
 class HospitalView(APIView):
         def get(self,request,format=None):
@@ -43,10 +42,10 @@ class  singleHospitalView(APIView):
 
         def put(self,request,id):
            hospital=self.get_single_hospital(id=id)
-           serializer=HospitalSerializer(hospital,data=request.data)
+           serializers=HospitalSerializer(hospital,data=request.data)
 
-           if (serializer.is_valid()):
-             serializer.save()
+           if (serializers.is_valid()):
+             serializers.save()
              return Response(serializers.data,status=status.HTTP_200_OK)
            return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
         
