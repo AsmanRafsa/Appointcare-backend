@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 def upload_to(instance,filename):
@@ -58,13 +60,17 @@ class DoctorsDetails(models.Model):
 
 
 
+class PatientDetails(models.Model):
+    patientName = models.CharField(max_length=255)
+    patientDisease=models.TextField()
+    patientContact=models.CharField(max_length=15)
+    patientAge = models.PositiveIntegerField()
+    timeBooked=models.DateTimeField(default=timezone.now())
+    patientDoctor=models.CharField(max_length=50)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='patient')
+
+    def __str__(self):
+        return self.patientName
 
 
 
-
-    # class PatientsDetail(models.Model):
-#     patientName=models.CharField(max_length=50)
-#     patientDisease=models.TextField()
-#     patientContact=models.CharField(max_length=15)
-#     timeBooked=models.DateTimeField(default=timezone.now())
-#     patientDoctor=models.CharField(max_length=50)

@@ -5,12 +5,14 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    # path('hospitals/',views.HospitalView.as_view(),name='hospitals'),
-    # path('hospitals/<id>',views.SingleHospitalView.as_view(),name='singleHospital'),
-    # path('new-hospital/', views.NewHospitalView.as_view(), name="new-hospital"),
-    # path('hospitaladmin-login/',views.HospitalLoginView.as_view(),name="hospitallogin")
-     path('hospital/register',views.HospitalRegistrationView.as_view(),name='register'),
+    path('hospital/', views.HospitalView.as_view(), name='hospital'),
+    path('hospital/<id>',views.SingleHospitalView.as_view(),name='singleHospital'),
+    path('hospital/register',views.HospitalRegistrationView.as_view(),name='register'),
     path('hospital/login',views.HospitalLoginView.as_view(),name='login'),
+    path('doctors/', views.DoctorDetailsView.as_view(), name='doctors'),
+    path('doctorsdetail/<id>/', views.DoctorView.as_view(), name='doctordetail'),
+    path('patients/', views.PatientView.as_view(), name='patient'),
+
    
 
 ]

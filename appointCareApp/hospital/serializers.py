@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Hospital
+from ..models import Hospital,HospitalDetails,DoctorsDetails,PatientDetails
 
 class HospitalRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +17,23 @@ class HospitalRegistrationSerializer(serializers.ModelSerializer):
 class HospitalLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
+
+
+
+class HospitalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=HospitalDetails
+        fields=("id","hospital_Image","hospital_Location","hospital_Slogan","hospital_Description",)
+
+
+
+class DoctorsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=DoctorsDetails
+        fields=('id','doctorImage','doctorName','doctorSpeciality',)
+
+
+class PatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PatientDetails
+        fields = ['id', 'patientName', 'patientAge', 'patientContact','patientDisease','timeBooked','patientDoctor',]        
