@@ -72,4 +72,11 @@ class DoctorsDetails(models.Model):
 
 
 
+class HospitalNotification(models.Model):
+    patient_name = models.CharField(max_length=100)
+    booked_date = models.DateTimeField()
+
+    def __str__(self):
+        return f"Hospital Notification for {self.patient_name} - {self.booked_date}"
+
 

@@ -11,6 +11,8 @@ urlpatterns = [
     path('hospital/login',views.HospitalLoginView.as_view(),name='login'),
     path('doctors/', views.DoctorDetailsView.as_view(), name='doctors'),
     path('doctorsdetail/<id>/', views.DoctorView.as_view(), name='doctordetail'),
+    path('hospital-notifications/',views.HospitalNotificationView.as_view(), name='hospital-notification'),
+    path('hospital-notifications/<id>/',views.HospitalNotificationDetailView.as_view(), name='hospital-notification-detail'),
 
    
 

@@ -1,14 +1,14 @@
 from django.shortcuts import render
-from appointCareApp.hospital.serializers import HospitalSerializer,HospitalLoginSerializer,DoctorsSerializer
+from appointCareApp.hospital.serializers import HospitalSerializer,HospitalRegistrationSerializer,HospitalLoginSerializer,DoctorsSerializer,HospitalNotificationSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import Hospital,HospitalDetails,DoctorsDetails
+from .models import Hospital,HospitalDetails,DoctorsDetails,HospitalNotification
+from rest_framework import generics
 
-from appointCareApp.hospital.serializers import HospitalLoginSerializer, HospitalRegistrationSerializer
 
 class HospitalRegistrationView(CreateAPIView):
     queryset = Hospital.objects.all()
@@ -95,4 +95,12 @@ class DoctorView(APIView):
         doctor.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    
+
+
+class HospitalNotificationView(generics.ListCreateAPIView):
+    queryset = HospitalNotification.objects.all()
+    serializer_class = HospitalNotificationSerializer
+
+class HospitalNotificationDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = HospitalNotification.objects.all()
+    serializer_class = HospitalNotificationSerializer
