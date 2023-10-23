@@ -40,7 +40,7 @@ class Hospital(AbstractBaseUser, PermissionsMixin):
 
 class HospitalDetails(models.Model):
     hospital=models.OneToOneField(Hospital, on_delete=models.CASCADE)
-    hospital_Image=models.ImageField(("image"),upload_to=upload_to,default="hospitals/")
+    hospital_Image=models.ImageField(("image"),upload_to=upload_to,default="hospitals/mayoclinic.jpg")
     hospital_Location=models.CharField(max_length=60)
     hospital_Slogan=models.CharField(max_length=100, blank=True)
     hospital_Description=models.TextField()
@@ -49,28 +49,28 @@ class HospitalDetails(models.Model):
         return 'hospital details'
     
 
+SPECIALITIES = [
+    ('cardiologist', 'Cardiologist'),
+    ('dermatologist', 'Dermatologist'),
+    ('neurologist', 'Neurologist'),
+    ('pediatric','Pediatric')
+    
+]
+
+
+
+
 class DoctorsDetails(models.Model):
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='doctors')
     doctorImage=models.ImageField(("image"),upload_to=upload_to,default="hospitals/")
     doctorName=models.CharField(max_length=50)
-    doctorSpeciality=models.CharField(max_length=50)
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='doctors')
+    doctorSpeciality=models.CharField(max_length=50,choices=SPECIALITIES)
 
     def __str__(self):
         return self.doctorName
 
 
 
-class PatientDetails(models.Model):
-    patientName = models.CharField(max_length=255)
-    patientDisease=models.TextField()
-    patientContact=models.CharField(max_length=15)
-    patientAge = models.PositiveIntegerField()
-    timeBooked=models.DateTimeField(default=timezone.now())
-    patientDoctor=models.CharField(max_length=50)
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='patient')
-
-    def __str__(self):
-        return self.patientName
 
 
 

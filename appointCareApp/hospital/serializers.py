@@ -23,17 +23,13 @@ class HospitalLoginSerializer(serializers.Serializer):
 class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model=HospitalDetails
-        fields=("id","hospital_Image","hospital_Location","hospital_Slogan","hospital_Description",)
+        fields=("id","hospital","hospital_Image","hospital_Location","hospital_Slogan","hospital_Description",)
 
 
 
 class DoctorsSerializer(serializers.ModelSerializer):
     class Meta:
         model=DoctorsDetails
-        fields=('id','doctorImage','doctorName','doctorSpeciality',)
+        fields=('id','doctorImage','doctorName','doctorSpeciality','hospital',)
 
-
-class PatientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PatientDetails
-        fields = ['id', 'patientName', 'patientAge', 'patientContact','patientDisease','timeBooked','patientDoctor',]        
+     
