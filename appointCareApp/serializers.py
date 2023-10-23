@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, Booking
         
 class UserSerializer(serializers.ModelSerializer):
     first_name=serializers.CharField(required=True)
@@ -35,7 +35,33 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=UserProfile
-        fields=["user","phoneNumber","profilePic"]    
+        fields='__all__'
+        
+        
+        
+
+# class HospitalSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Hospital
+#         fields = '__all__'
+
+# class DoctorSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Doctor
+#         fields = '__all__'
+
+# class AppointmentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Appointment
+#         fields = '__all__'
+
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = '__all__'
+        
+        
+
     
     
          
