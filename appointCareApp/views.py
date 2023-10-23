@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from appointCareApp.hospital.serializers import HospitalSerializer,HospitalLoginSerializer,DoctorsSerializer,PatientSerializer
+from appointCareApp.hospital.serializers import HospitalSerializer,HospitalLoginSerializer,DoctorsSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import Hospital,HospitalDetails,DoctorsDetails,PatientDetails
+from .models import Hospital,HospitalDetails,DoctorsDetails
 
 from appointCareApp.hospital.serializers import HospitalLoginSerializer, HospitalRegistrationSerializer
 
