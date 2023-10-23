@@ -1,43 +1,58 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
-def upload_to(instance, filename):
+def upload_user_profiles(instance, filename):
     return "user/{filename}".format(filename=filename)
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 def upload_to(instance,filename):
     return "hospitals/{filename}".format(filename=filename)
 
-class HospitalManager(BaseUserManager):
-    def create_user(self, email, phone_number, name, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, phone_number=phone_number, name=name, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+SPECIALITIES = [
+    ('cardiologist', 'Cardiologist'),
+    ('dermatologist', 'Dermatologist'),
+    ('neurologist', 'Neurologist'),
+    ('pediatric','Pediatric')
+    
+]
 
-    def create_superuser(self, email, phone_number, name, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+class UserProfile(models.Model):
+    user=models.OneToOneField(User,primary_key=True, on_delete=models.CASCADE)
+    phoneNumber=models.CharField(max_length=150)
+    profilePic=models.ImageField(("image"),upload_to=upload_user_profiles,default="user/default.png")
 
-        return self.create_user(email, phone_number, name, password, **extra_fields)
+    
+    def __str__(self):
+        return f"{self.user.username}'s profile"
 
-class Hospital(AbstractBaseUser, PermissionsMixin):
+class Hospital(AbstractUser):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, unique=True)
     name = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    username = models.CharField(max_length=150, default=email)
 
-    objects = HospitalManager()
+    # password = models.CharField(max_length=128)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone_number', 'name']
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to '
+            'each of their groups.',
+        related_name='hospitals'  # Provide a custom related name
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name='hospitals_user_permissions'  # Provide a custom related name
+    )
+   
 
     def __str__(self):
         return self.name
@@ -51,19 +66,8 @@ class HospitalDetails(models.Model):
     hospital_Description=models.TextField()
 
     def __str__(self):
-        return 'hospital details'
+        return f"{self.hospital}'s profile"
     
-
-SPECIALITIES = [
-    ('cardiologist', 'Cardiologist'),
-    ('dermatologist', 'Dermatologist'),
-    ('neurologist', 'Neurologist'),
-    ('pediatric','Pediatric')
-    
-]
-
-
-
 
 class DoctorsDetails(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='doctors')
@@ -74,51 +78,35 @@ class DoctorsDetails(models.Model):
     def __str__(self):
         return self.doctorName
 
-
+class Booking(models.Model):
+    hospital = models.OneToOneField(Hospital, on_delete=models.CASCADE, default=1)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    patientDisease=models.CharField(max_length=50,choices=SPECIALITIES)
+    patientAge = models.PositiveIntegerField()
+    timeBooked=models.DateTimeField(default=timezone.now())
+    
+    def __str__(self):
+        return f"Booking {self.user.username}'s - {self.hospital}"
 
 
 
 class HospitalNotification(models.Model):
-    patient_name = models.CharField(max_length=100)
-    booked_date = models.DateTimeField()
+    booking=models.OneToOneField(Booking, on_delete=models.CASCADE, null=True)
+    # patient_name = models.CharField(max_length=100)
+    # booked_date = models.DateTimeField()
 
     def __str__(self):
-        return f"Hospital Notification for {self.patient_name} - {self.booked_date}"
+        return f"Hospital Notification for {self.booking}"
 
-# Create your models here.
 
-class UserProfile(models.Model):
-    user=models.OneToOneField(User,primary_key=True, on_delete=models.CASCADE)
-    phoneNumber=models.CharField(max_length=150)
-    profilePic=models.ImageField(("image"),upload_to=upload_to,default="user/")
 
     
-    def __str__(self):
-        return self.user.username
-    
-
-# class Hospital(models.Model):
-#     name = models.CharField(max_length=100)
-#     location = models.CharField(max_length=100)
-
-# class Doctor(models.Model):
-#     name = models.CharField(max_length=100)
-#     specialty = models.CharField(max_length=100)
-#     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
 
 # class Appointment(models.Model):
 #     patient = models.ForeignKey(User, on_delete=models.CASCADE)
 #     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 #     date_time = models.DateTimeField()
 
-class Booking(models.Model):
-    # hospital = models.OneToOneField(Hospital, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    patientDisease=models.TextField()
-    patientAge = models.PositiveIntegerField()
-    timeBooked=models.DateTimeField(default=timezone.now())
-    
-    def __str__(self):
-        return self.user
+
 
 

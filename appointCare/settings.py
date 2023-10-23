@@ -82,19 +82,19 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'appointcare',
-         'USER':'postgres',
-        'PASSWORD':'Aspharnamsat@gma1l.c0m',
-       
+        'USER': 'postgres',
+        'PASSWORD': 'Aspharnamsat@gma1l.c0m',
+
     }
 }
 
 
-AUTH_USER_MODEL = "appointCareApp.Hospital"
+# AUTH_USER_MODEL = "appointCareApp.Hospital"
 
 REST_FRAMEWORK = {
-    
+
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        
+
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
@@ -120,6 +120,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # The default ModelBackend
+    'appointCareApp.custom_auth_backends.EmailBackend',
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -136,12 +142,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-MEDIA_URL='media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-

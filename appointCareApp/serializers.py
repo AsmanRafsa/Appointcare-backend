@@ -38,18 +38,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields='__all__'
         
         
-        
-
-# class HospitalSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Hospital
-#         fields = '__all__'
-
-# class DoctorSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Doctor
-#         fields = '__all__'
-
 # class AppointmentSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Appointment

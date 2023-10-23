@@ -1,23 +1,50 @@
 from django.shortcuts import render
-from appointCareApp.hospital.serializers import HospitalSerializer,HospitalRegistrationSerializer,HospitalLoginSerializer,DoctorsSerializer,HospitalNotificationSerializer
-from rest_framework import permissions, status,viewsets
+from appointCareApp.hospital.serializers import HospitalSerializer, HospitalRegistrationSerializer, HospitalLoginSerializer, DoctorsSerializer, HospitalNotificationSerializer
+from rest_framework import permissions, status, viewsets
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import Hospital,HospitalDetails,DoctorsDetails,HospitalNotification, UserProfile, Booking
+from .models import Hospital, HospitalDetails, DoctorsDetails, HospitalNotification, UserProfile, Booking
 from rest_framework import generics
-from .serializers import UserSerializer,UserProfileSerializer, BookingSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserSerializer, UserProfileSerializer, BookingSerializer, CustomTokenObtainPairSerializer
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import make_password
 
 
+# class HospitalRegistrationView(CreateAPIView):
+#     queryset = Hospital.objects.all()
+#     serializer_class = HospitalRegistrationSerializer
 
-class HospitalRegistrationView(CreateAPIView):
-    queryset = Hospital.objects.all()
-    serializer_class = HospitalRegistrationSerializer
+# class HospitalLoginView(TokenObtainPairView):
+#     serializer_class = HospitalLoginSerializer
 
-class HospitalLoginView(TokenObtainPairView):
-    serializer_class = HospitalLoginSerializer
+
+class HospitalRegistrationView(APIView):
+    def post(self, request):
+        serializer = HospitalRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            # Create the institution instance and hash the password
+            the_hospital = serializer.save()
+            the_hospital.password = make_password(request.data['password'])
+            the_hospital.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class HospitalLoginView(APIView):
+    # serializer_class = HospitalLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = HospitalLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        hospital = authenticate(request, email=serializer.validated_data['email'], password=serializer.validated_data['password'])
+        if hospital:
+            login(request, hospital)
+            return Response({"success":"Successful Log In"},status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -33,6 +60,7 @@ class HospitalView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SingleHospitalView(APIView):
     def get_single_hospital(self, id):
@@ -54,14 +82,13 @@ class SingleHospitalView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    
+
+
 class DoctorDetailsView(APIView):
     def get(self, request, format=None):
         doctors = DoctorsDetails.objects.all()
         serializer = DoctorsSerializer(doctors, many=True)
         return Response(serializer.data)
-    
 
     def post(self, request, format=None):
         serializer = DoctorsSerializer(data=request.data)
@@ -72,7 +99,7 @@ class DoctorDetailsView(APIView):
 
 
 class DoctorView(APIView):
-    
+
     def get_object(self, id):
         try:
             return DoctorsDetails.objects.get(id=id)
@@ -98,10 +125,10 @@ class DoctorView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
 class HospitalNotificationView(generics.ListCreateAPIView):
     queryset = HospitalNotification.objects.all()
     serializer_class = HospitalNotificationSerializer
+
 
 class HospitalNotificationDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = HospitalNotification.objects.all()
@@ -109,19 +136,20 @@ class HospitalNotificationDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # Create your views here.
-class UserView(APIView):    
-    permission_classes=(permissions.AllowAny,)
-    authentication_classes=()
-    
-    def post(self,request,format='json'):
-        serializer=UserSerializer(data=request.data)
+class UserView(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def post(self, request, format='json'):
+        serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)     
-    
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CustomTokenObtainView(TokenObtainPairView):
-    serializer_class=CustomTokenObtainPairSerializer
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class UserProfileUploadView(APIView):
@@ -134,18 +162,10 @@ class UserProfileUploadView(APIView):
             return Response(dataSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class HospitalViewSet(viewsets.ModelViewSet):
-#     queryset = Hospital.objects.all()
-#     serializer_class = HospitalSerializer
-
-# class DoctorViewSet(viewsets.ModelViewSet):
-#     queryset = Doctor.objects.all()
-#     serializer_class = DoctorSerializer
-
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    
+
 
 # class AppointmentViewSet(viewsets.ModelViewSet):
 #     queryset = Appointment.objects.all()
