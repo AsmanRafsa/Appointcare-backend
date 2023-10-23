@@ -1,12 +1,11 @@
 from django.shortcuts import render
-from rest_framework import permissions, status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import permissions, status,viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserSerializer
+from .serializers import UserSerializer,UserProfileSerializer, BookingSerializer
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import UserProfileSerializer
+from .models import UserProfile, Booking
 
 # Create your views here.
 class UserView(APIView):    
@@ -33,3 +32,20 @@ class UserProfileUploadView(APIView):
         else:
             return Response(dataSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+# class HospitalViewSet(viewsets.ModelViewSet):
+#     queryset = Hospital.objects.all()
+#     serializer_class = HospitalSerializer
+
+# class DoctorViewSet(viewsets.ModelViewSet):
+#     queryset = Doctor.objects.all()
+#     serializer_class = DoctorSerializer
+
+class BookingViewSet(viewsets.ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    
+
+# class AppointmentViewSet(viewsets.ModelViewSet):
+#     queryset = Appointment.objects.all()
+#     serializer_class = AppointmentSerializer
