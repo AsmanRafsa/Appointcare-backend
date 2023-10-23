@@ -61,7 +61,7 @@ SPECIALITIES = [
 
 class DoctorsDetails(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='doctors')
-    doctorImage=models.ImageField(("image"),upload_to=upload_to,default="hospitals/")
+    doctorImage=models.ImageField(("image"),upload_to=upload_to,default="hospitals/default.jpg")
     doctorName=models.CharField(max_length=50)
     doctorSpeciality=models.CharField(max_length=50,choices=SPECIALITIES)
 
