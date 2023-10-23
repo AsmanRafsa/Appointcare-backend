@@ -1,7 +1,4 @@
 venv/
 db.sqlite3
-appointCare/__pycache__
-appointCareApp/__pycache__
-appointCareApp/migrations/__pycache__
-appointCareApp/hospital/__pycache__
+__pycache__
 .vscode/
