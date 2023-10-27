@@ -15,9 +15,12 @@ SPECIALITIES = [
     ('cardiologist', 'Cardiologist'),
     ('dermatologist', 'Dermatologist'),
     ('neurologist', 'Neurologist'),
-    ('pediatric','Pediatric')
+    ('pediatric','Pediatric'),
+    
     
 ]
+
+
 
 class UserProfile(models.Model):
     user=models.OneToOneField(User,primary_key=True, on_delete=models.CASCADE)
@@ -79,7 +82,7 @@ class DoctorsDetails(models.Model):
         return self.doctorName
 
 class Booking(models.Model):
-    hospital = models.OneToOneField(Hospital, on_delete=models.CASCADE, default=1)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, default=1)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     patientDisease=models.CharField(max_length=50,choices=SPECIALITIES)
     patientAge = models.PositiveIntegerField()
