@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.decorators import api_view
 from appointCareApp.hospital.serializers import HospitalSerializer, HospitalRegistrationSerializer, HospitalLoginSerializer, DoctorsSerializer, HospitalNotificationSerializer
 from rest_framework import permissions, status, viewsets
 from rest_framework.views import APIView
@@ -20,6 +21,9 @@ from django.contrib.auth.hashers import make_password
 # class HospitalLoginView(TokenObtainPairView):
 #     serializer_class = HospitalLoginSerializer
 
+# @api_view(['GET'])
+# def get_hospital_data(request):
+#     print(request.user)
 
 class HospitalRegistrationView(APIView):
     def post(self, request):
@@ -42,7 +46,14 @@ class HospitalLoginView(APIView):
         hospital = authenticate(request, email=serializer.validated_data['email'], password=serializer.validated_data['password'])
         if hospital:
             login(request, hospital)
-            return Response({"success":"Successful Log In"},status=status.HTTP_200_OK)
+
+            response_data={
+                'id':hospital.id,
+                'email':hospital.email,
+                'phone_number':hospital.phone_number,
+                'name':hospital.name,
+            }
+            return Response(response_data,status=status.HTTP_200_OK)
         else:
             return Response({"detail": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -57,9 +68,16 @@ class HospitalView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        # hospital_id=request.data.get('hospital')
+        # try:
+        #     hospital_id=int(hospital_id)
+        # except ValueError:
+        #     return Response({'error':'Invalid hospital format'},status=status.HTTP_400_BAD_REQUEST)  
+        # request.data['hospital']=hospital_id  
         serializer = HospitalSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -67,7 +85,11 @@ class HospitalView(APIView):
 class SingleHospitalView(APIView):
     def get_single_hospital(self, id):
         try:
+
             return HospitalDetails.objects.get(id=id)
+
+            return HospitalDetails.objects.get(hospital=id)
+
         except HospitalDetails.DoesNotExist:
             raise Http404
 

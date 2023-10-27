@@ -8,13 +8,16 @@ def upload_user_profiles(instance, filename):
     return "user/{filename}".format(filename=filename)
 
 
-def upload_to(instance,filename):
+def upload_to(instance, filename):
     return "hospitals/{filename}".format(filename=filename)
 
+
 SPECIALITIES = [
+    ('general', 'General'),
     ('cardiologist', 'Cardiologist'),
     ('dermatologist', 'Dermatologist'),
     ('neurologist', 'Neurologist'),
+
     ('pediatric','Pediatric'),
     
     
@@ -23,13 +26,15 @@ SPECIALITIES = [
 
 
 class UserProfile(models.Model):
-    user=models.OneToOneField(User,primary_key=True, on_delete=models.CASCADE)
-    phoneNumber=models.CharField(max_length=150)
-    profilePic=models.ImageField(("image"),upload_to=upload_user_profiles,default="user/default.png")
+    user = models.OneToOneField(
+        User, primary_key=True, on_delete=models.CASCADE)
+    phoneNumber = models.CharField(max_length=150)
+    profilePic = models.ImageField(
+        ("image"), upload_to=upload_user_profiles, default="user/default.png")
 
-    
     def __str__(self):
         return f"{self.user.username}'s profile"
+
 
 class Hospital(AbstractUser):
     email = models.EmailField(unique=True)
@@ -44,7 +49,7 @@ class Hospital(AbstractUser):
         verbose_name='groups',
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions granted to '
-            'each of their groups.',
+        'each of their groups.',
         related_name='hospitals'  # Provide a custom related name
     )
 
@@ -55,46 +60,54 @@ class Hospital(AbstractUser):
         help_text='Specific permissions for this user.',
         related_name='hospitals_user_permissions'  # Provide a custom related name
     )
-   
 
     def __str__(self):
         return self.name
-    
+
 
 class HospitalDetails(models.Model):
-    hospital=models.OneToOneField(Hospital, on_delete=models.CASCADE)
-    hospital_Image=models.ImageField(("image"),upload_to=upload_to,default="hospitals/mayoclinic.jpg")
-    hospital_Location=models.CharField(max_length=60)
-    hospital_Slogan=models.CharField(max_length=100, blank=True)
-    hospital_Description=models.TextField()
+    hospital = models.OneToOneField(Hospital, on_delete=models.CASCADE)
+    hospital_Image = models.ImageField(
+        ("image"), upload_to=upload_to, default="hospitals/mayoclinic.jpg")
+    hospital_Location = models.CharField(max_length=60)
+    hospital_Slogan = models.CharField(max_length=100, blank=True)
+    hospital_Description = models.TextField()
 
     def __str__(self):
         return f"{self.hospital}'s profile"
-    
+
 
 class DoctorsDetails(models.Model):
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='doctors')
-    doctorImage=models.ImageField(("image"),upload_to=upload_to,default="hospitals/default.jpg")
-    doctorName=models.CharField(max_length=50)
-    doctorSpeciality=models.CharField(max_length=50,choices=SPECIALITIES)
+    hospital = models.ForeignKey(
+        Hospital, on_delete=models.CASCADE, related_name='doctors')
+    doctorImage = models.ImageField(
+        ("image"), upload_to=upload_to, default="hospitals/default.jpg")
+    doctorName = models.CharField(max_length=50)
+    doctorSpeciality = models.CharField(max_length=50, choices=SPECIALITIES)
 
     def __str__(self):
         return self.doctorName
 
+
 class Booking(models.Model):
+
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, default=1)
+
+    hospital = models.OneToOneField(
+        Hospital, on_delete=models.CASCADE, default=1)
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    patientDisease=models.CharField(max_length=50,choices=SPECIALITIES)
+    patientDisease = models.CharField(max_length=50, choices=SPECIALITIES)
     patientAge = models.PositiveIntegerField()
-    timeBooked=models.DateTimeField(default=timezone.now())
-    
+    timeBooked = models.DateTimeField(default=timezone.now())
+
     def __str__(self):
         return f"Booking {self.user.username}'s - {self.hospital}"
 
 
-
 class HospitalNotification(models.Model):
-    booking=models.OneToOneField(Booking, on_delete=models.CASCADE, null=True)
+    booking = models.OneToOneField(
+        Booking, on_delete=models.CASCADE, null=True)
     # patient_name = models.CharField(max_length=100)
     # booked_date = models.DateTimeField()
 
@@ -102,14 +115,7 @@ class HospitalNotification(models.Model):
         return f"Hospital Notification for {self.booking}"
 
 
-
-    
-
 # class Appointment(models.Model):
 #     patient = models.ForeignKey(User, on_delete=models.CASCADE)
 #     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 #     date_time = models.DateTimeField()
-
-
-
-
