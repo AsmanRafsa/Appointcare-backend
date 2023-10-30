@@ -51,10 +51,8 @@ INSTALLED_APPS = [
     'appointCareApp',
     'rest_framework',
     'rest_framework_simplejwt',
-
-    
     "corsheaders",
-
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
