@@ -200,13 +200,19 @@ class BookingView(APIView):
         bookings=Booking.objects.all()
         serializer=BookingSerializer(bookings,many=True)
         return Response(serializer.data)
-    def put(self, request):
-        dataSerializer = BookingSerializer(data=request.data)
-        if dataSerializer.is_valid():
-            dataSerializer.save()
-            return Response(dataSerializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(dataSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def put(self, request):
+    #     dataSerializer = BookingSerializer(data=request.data)
+    #     if dataSerializer.is_valid():
+    #         dataSerializer.save()
+    #         return Response(dataSerializer.data, status=status.HTTP_201_CREATED)
+    #     else:
+    #         return Response(dataSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self,request,format='json'):
+        serializer=BookingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)      
     
 
 
