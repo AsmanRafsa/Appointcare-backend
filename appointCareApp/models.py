@@ -17,8 +17,22 @@ SPECIALITIES = [
     ('cardiologist', 'Cardiologist'),
     ('dermatologist', 'Dermatologist'),
     ('neurologist', 'Neurologist'),
-
-    ('pediatric','Pediatric'),
+    ('pediatric', 'Pediatric'),
+    ('dentistry', 'Dentistry'),
+    ('surgery', 'Surgery'),
+    ('pharmacy', 'Pharmacy'),
+    ('ct-scan', 'Ct-scan'),
+    ('ultrasound', 'Ultrasound'),
+    ('physiotherapy', 'Physiotherapy'),
+    ('orthopaedics', 'Orthopaedics'),
+    ('antenatal&postanalservices', 'Antenatal&postanalservices'),
+    ('counselling', 'Counselling'),
+    ('babywellclinics', 'Babywellclinics'),
+    ('tBclinics', 'TBclinics'),
+    ('laboratoryservices', 'Laboratoryservices'),
+    ('curativeservices', 'Curativeservices'),
+    ('occupationalsevices', 'Occupationalsevices'),
+    ('maternity in-patient services with a word', 'Maternity in-patient services with a word'),
     
     
 ]
