@@ -62,7 +62,9 @@ class HospitalLoginView(APIView):
 class HospitalView(APIView):
     def get(self, request, format=None):
         hospitals = HospitalDetails.objects.all()
+        # print(HospitalDetails.objects.get(hospital=1))
         serializer = HospitalSerializer(hospitals, many=True)
+        # print(serializer.data)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -83,12 +85,20 @@ class HospitalView(APIView):
 class SingleHospitalView(APIView):
     def get_single_hospital(self, id):
         try:
+
+            return HospitalDetails.objects.get(id=id)
+
             return HospitalDetails.objects.get(hospital=id)
+
         except HospitalDetails.DoesNotExist:
             raise Http404
 
     def get(self, request, id, format=None):
         hospital = self.get_single_hospital(id)
+        # print(hospital.name)
+        # print(hospital.hospital.email)
+        # print(hospital.hospital.phone_number)
+       
         serializer = HospitalSerializer(hospital)
         return Response(serializer.data)
 
@@ -171,6 +181,10 @@ class CustomTokenObtainView(TokenObtainPairView):
 
 
 class UserProfileUploadView(APIView):
+    def get(self,request,format=None):
+        users=UserProfile.objects.all()
+        serializer=UserProfileSerializer(users,many=True)
+        return Response(serializer.data)
     def put(self, request):
         dataSerializer = UserProfileSerializer(data=request.data)
         if dataSerializer.is_valid():
@@ -178,11 +192,22 @@ class UserProfileUploadView(APIView):
             return Response(dataSerializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(dataSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
-class BookingViewSet(viewsets.ModelViewSet):
-    queryset = Booking.objects.all()
-    serializer_class = BookingSerializer
+class BookingView(APIView):
+    def get(self,request,format=None):
+        bookings=Booking.objects.all()
+        serializer=BookingSerializer(bookings,many=True)
+        return Response(serializer.data)
+    def put(self, request):
+        dataSerializer = BookingSerializer(data=request.data)
+        if dataSerializer.is_valid():
+            dataSerializer.save()
+            return Response(dataSerializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(dataSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 # class AppointmentViewSet(viewsets.ModelViewSet):
