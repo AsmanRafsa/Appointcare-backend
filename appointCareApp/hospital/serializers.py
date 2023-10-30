@@ -6,9 +6,14 @@ class HospitalRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
         fields = ('email', 'phone_number', 'name', 'password')
-    
+
+# class RelatedHospitalLoginSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model=Hospital
+#         fields=('phone_number', 'name',)
 
 class HospitalLoginSerializer(serializers.Serializer):
+
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
@@ -21,9 +26,15 @@ class RelatedHospitalSerializer(serializers.ModelSerializer):
         
         
 class HospitalSerializer(serializers.ModelSerializer):
+
     related_data=RelatedHospitalSerializer(source="hospital", read_only=True)
+
+    # hospital=HospitalRegistrationSerializer()
+    # hospital=serializers.IntegerField()
+
     class Meta:
         model = HospitalDetails
+        # fields = "__all__"
         fields = ("id", "hospital", "hospital_Image", "hospital_Location",
                   "hospital_Slogan", "hospital_Description","related_data")
         
