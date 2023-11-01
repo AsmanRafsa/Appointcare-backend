@@ -55,4 +55,4 @@ class DoctorsSerializer(serializers.ModelSerializer):
 class HospitalNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = HospitalNotification
-        fields = ('id', 'patient_name', 'booked_date', 'hospital',)
+        fields = ('id','booking',)

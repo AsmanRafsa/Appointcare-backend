@@ -106,14 +106,10 @@ class DoctorsDetails(models.Model):
 class Booking(models.Model):
 
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, default=1)
-
-    hospital = models.OneToOneField(
-        Hospital, on_delete=models.CASCADE, default=1)
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    patientDisease = models.CharField(max_length=50, choices=SPECIALITIES)
+    patientDisease = models.CharField(max_length=50)
     patientAge = models.PositiveIntegerField()
-    timeBooked = models.DateTimeField(default=timezone.now())
+    timeBooked = models.DateTimeField()
 
     def __str__(self):
         return f"Booking {self.user.username}'s - {self.hospital}"
@@ -122,7 +118,7 @@ class Booking(models.Model):
 class HospitalNotification(models.Model):
     booking = models.OneToOneField(
         Booking, on_delete=models.CASCADE, null=True)
-    # patient_name = models.CharField(max_length=100)
+    # patient_name = models.CharField(max_length=255)
     # booked_date = models.DateTimeField()
 
     def __str__(self):
