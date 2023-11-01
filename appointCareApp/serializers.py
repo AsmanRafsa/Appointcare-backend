@@ -27,9 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self,attrs):
         data=super(CustomTokenObtainPairSerializer,self).validate(attrs)
-        print(data)
+        data.update({"id":self.user.id})
         data.update({"username":self.user.username})
         data.update({"email":self.user.email})
+        print(data)
+        
         return data
     
 class RelatedUserProfileSerializer(serializers.ModelSerializer):

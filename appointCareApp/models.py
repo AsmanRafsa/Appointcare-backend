@@ -105,7 +105,7 @@ class DoctorsDetails(models.Model):
 
 class Booking(models.Model):
 
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, default=1)
+    hospital = models.ForeignKey(HospitalDetails, on_delete=models.CASCADE, default=1)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     patientDisease = models.CharField(max_length=50)
     patientAge = models.PositiveIntegerField()

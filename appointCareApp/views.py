@@ -185,6 +185,7 @@ class UserProfileUploadView(APIView):
         users=UserProfile.objects.all()
         serializer=UserProfileSerializer(users,many=True)
         return Response(serializer.data)
+
     def put(self, request):
         dataSerializer = UserProfileSerializer(data=request.data)
         if dataSerializer.is_valid():
@@ -207,7 +208,7 @@ class BookingView(APIView):
     #         return Response(dataSerializer.data, status=status.HTTP_201_CREATED)
     #     else:
     #         return Response(dataSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def put(self,request,format='json'):
+    def post(self,request,format='json'):
         serializer=BookingSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
