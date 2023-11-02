@@ -2,7 +2,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import UserProfile, Booking,Hospital, HospitalDetails
-        
+from .models import UserProfile, Booking,Hospital,RatingAndReview        
 class UserSerializer(serializers.ModelSerializer):
     first_name=serializers.CharField(required=True)
     last_name=serializers.CharField(required=True)
@@ -63,6 +63,12 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = '__all__'
+        
+class RatingAndReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RatingAndReview
+        fields = '__all__'
+        
         
         
 

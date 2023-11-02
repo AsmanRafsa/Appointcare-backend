@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import UserView, CustomTokenObtainView,UserProfileUploadView, BookingView
+from .views import UserView, CustomTokenObtainView,UserProfileUploadView, BookingView,RatingAndReviewList,RatingAndReviewDetail
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
@@ -29,6 +29,8 @@ urlpatterns = [
     path('doctorsdetail/<id>/', views.DoctorView.as_view(), name='doctordetail'),
     path('hospital-notifications/',views.HospitalNotificationView.as_view(), name='hospital-notification'),
     path('hospital-notifications/<id>/',views.HospitalNotificationDetailView.as_view(), name='hospital-notification-detail'),
+    path('reviews/', RatingAndReviewList.as_view(), name='review-list'),
+    path('reviews/<int:pk>/', RatingAndReviewDetail.as_view(), name='review-detail'),
 
 ]
 

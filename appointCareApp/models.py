@@ -129,3 +129,10 @@ class HospitalNotification(models.Model):
 #     patient = models.ForeignKey(User, on_delete=models.CASCADE)
 #     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 #     date_time = models.DateTimeField()
+
+class RatingAndReview(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hospital = models.ForeignKey(HospitalDetails, on_delete=models.CASCADE) 
+    rating = models.PositiveIntegerField(default=5)
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

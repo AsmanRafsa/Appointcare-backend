@@ -7,9 +7,9 @@ from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import Hospital, HospitalDetails, DoctorsDetails, HospitalNotification, UserProfile, Booking
+from .models import Hospital, HospitalDetails, DoctorsDetails, HospitalNotification, UserProfile, Booking,RatingAndReview
 from rest_framework import generics
-from .serializers import UserSerializer, UserProfileSerializer, BookingSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserSerializer, UserProfileSerializer, BookingSerializer, CustomTokenObtainPairSerializer,RatingAndReviewSerializer
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 
@@ -217,6 +217,18 @@ class BookingView(APIView):
     
 
 
-# class AppointmentViewSet(viewsets.ModelViewSet):
-#     queryset = Appointment.objects.all()
-#     serializer_class = AppointmentSerializer
+class RatingAndReviewList(generics.ListCreateAPIView):
+    # queryset = RatingAndReview.objects.all()
+    def post(self,request,format='json'):
+        serializer_class = RatingAndReviewSerializer
+        serializer=serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)      
+    
+    
+
+class RatingAndReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RatingAndReview.objects.all()
+    serializer_class = RatingAndReviewSerializer
