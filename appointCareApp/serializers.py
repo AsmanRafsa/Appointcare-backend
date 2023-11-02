@@ -1,8 +1,8 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile, Booking
-        
+from .models import UserProfile, Booking,Hospital, HospitalDetails
+from .models import UserProfile, Booking,Hospital,RatingAndReview        
 class UserSerializer(serializers.ModelSerializer):
     first_name=serializers.CharField(required=True)
     last_name=serializers.CharField(required=True)
@@ -27,38 +27,48 @@ class UserSerializer(serializers.ModelSerializer):
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self,attrs):
         data=super(CustomTokenObtainPairSerializer,self).validate(attrs)
-        print(data)
+        data.update({"id":self.user.id})
         data.update({"username":self.user.username})
         data.update({"email":self.user.email})
+        print(data)
+        
         return data
+    
+class RelatedUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=( "first_name","last_name","email","username","password")
  
 class UserProfileSerializer(serializers.ModelSerializer):
+    related_data=RelatedUserProfileSerializer(source="user", read_only=True)
+    # print(related_data)
     class Meta:
         model=UserProfile
         fields='__all__'
         
         
-        
-
-# class HospitalSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Hospital
-#         fields = '__all__'
-
-# class DoctorSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Doctor
-#         fields = '__all__'
-
 # class AppointmentSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Appointment
 #         fields = '__all__'
+class RelatedHospitalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=HospitalDetails
+        fields=( "hospital", "hospital_Image", "hospital_Location",
+                  "hospital_Slogan", "hospital_Description",)
 
 class BookingSerializer(serializers.ModelSerializer):
+    related_data=RelatedHospitalSerializer(source="hospital",read_only=True)
+    related_userdata=RelatedUserProfileSerializer(source="user",read_only=True)
     class Meta:
         model = Booking
         fields = '__all__'
+        
+class RatingAndReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RatingAndReview
+        fields = '__all__'
+        
         
         
 
