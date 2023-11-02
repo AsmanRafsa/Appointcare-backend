@@ -24,7 +24,6 @@ class RelatedHospitalSerializer(serializers.ModelSerializer):
         
         
         
-        
 class HospitalSerializer(serializers.ModelSerializer):
 
     related_data=RelatedHospitalSerializer(source="hospital", read_only=True)
