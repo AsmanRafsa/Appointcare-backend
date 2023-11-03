@@ -108,9 +108,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'a2a1GdcGbcFc3bCCAD-E23**C3CdfcCe',
+        'PASSWORD': 'B1D54G*cge34d65F31D*6g2Ged3d2gg2',
         'HOST':'viaduct.proxy.rlwy.net',
-        'PORT':'52240'
+        'PORT':'58462'
     }
 }
 # if config('MODE')=="dev":
@@ -187,15 +187,8 @@ USE_TZ = True
 
 # STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
