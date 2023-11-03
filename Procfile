@@ -1,0 +1,1 @@
+web: gunicorn appointCare.wsgi --log-file -
