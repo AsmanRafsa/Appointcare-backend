@@ -106,10 +106,11 @@ WSGI_APPLICATION = 'appointCare.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'appointcare',
+        'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'mi@1955de',
-
+        'PASSWORD': 'a2a1GdcGbcFc3bCCAD-E23**C3CdfcCe',
+        'HOST':'viaduct.proxy.rlwy.net',
+        'PORT':'52240'
     }
 }
 # if config('MODE')=="dev":
@@ -132,13 +133,7 @@ DATABASES = {
 #        )
 #    }
 
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
 
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-
-
-# AUTH_USER_MODEL = "appointCareApp.Hospital"
 
 REST_FRAMEWORK = {
 
